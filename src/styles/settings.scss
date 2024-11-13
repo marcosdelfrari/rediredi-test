@@ -1,0 +1,33 @@
+.v-expansion-panel__shadow {
+  box-shadow: none !important;
+}
+
+.v-expansion-panel-title__icon {
+  color: #da3468;
+}
+
+.v-expansion-panel-title__overlay {
+  padding: 0 !important;
+}
+
+.v-expansion-panel-title {
+  padding: 0 !important;
+  min-height: 5px !important;
+  font-size: 16px !important;
+  font-weight: 600;
+  line-height: 20px;
+  color: #29354f;
+}
+
+.v-expansion-panel-text__wrapper,
+ul {
+  padding: 0 !important;
+  padding-top: 8px !important;
+  gap: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.v-expansion-panel-title:hover > .v-expansion-panel-title__overlay {
+  opacity: 0 !important;
+}
