@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue";
 
-// Define a propriedade de categoria
 const props = defineProps({
   categoryId: {
     type: Number,
@@ -11,49 +10,38 @@ const props = defineProps({
 
 const emit = defineEmits(["addSubcategory"]);
 
-// Variável para o nome da nova subcategoria e controle do estado
 const newSubcategoryName = ref("");
-const isCreating = ref(false); // Controle de criação
-
-// Função para adicionar a subcategoria
+const isCreating = ref(false);
 const addSubcategory = () => {
   if (newSubcategoryName.value.trim()) {
-    emit("addSubcategory", {
-      categoryId: props.categoryId,
-      name: newSubcategoryName.value,
-    });
-    resetState(); // Voltar ao estado inicial
+    emit("addSubcategory", newSubcategoryName.value);
+    resetState();
   }
 };
 
-// Função para iniciar o processo de criação
 const startCreating = () => {
   isCreating.value = true;
 };
 
-// Função para cancelar a criação
 const cancel = () => {
   resetState();
 };
 
-// Função para redefinir o estado inicial
 const resetState = () => {
   isCreating.value = false;
-  newSubcategoryName.value = ""; // Limpar o campo
+  newSubcategoryName.value = "";
 };
 </script>
 
 <template>
   <div>
-    <!-- Exibe o botão "Criar Subcategoria" -->
     <div v-if="!isCreating" @click="startCreating" class="item">
       <button>Adicionar subcategoria</button>
       <v-icon>mdi-plus</v-icon>
     </div>
 
-    <!-- Exibe o campo de entrada e os botões -->
     <div v-else class="item-input">
-      <input v-model="newSubcategoryName" placeholder="" />
+      <input v-model="newSubcategoryName" placeholder="Nome da subcategoria" />
       <div class="buttons">
         <button class="close" @click="cancel">
           <v-icon>mdi-close</v-icon>

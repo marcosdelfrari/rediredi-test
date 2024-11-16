@@ -1,10 +1,8 @@
 <template>
   <header class="navbar">
-    <!-- Condicionalmente exibe o botão de voltar se a rota não for "/" -->
     <button v-if="!isHomeRoute" @click="goToHome" class="back-button" icon>
       <v-icon>mdi-arrow-left</v-icon>
     </button>
-    <!-- Exibe o título da página -->
     <h1>{{ title }}</h1>
   </header>
 </template>
@@ -12,24 +10,20 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 
-// Definindo a prop 'title'
 const props = defineProps({
   title: {
     type: String,
-    default: "Categorias", // Título padrão
+    default: "Categorias",
   },
 });
 
-// Obtém a rota atual
 const route = useRoute();
 const router = useRouter();
 
-// Verifica se a rota é a página inicial ("/")
 const isHomeRoute = route.path === "/";
 
-// Função para navegar para a página inicial
 const goToHome = () => {
-  router.push("/"); // Navegação programática para a página inicial
+  router.push("/");
 };
 </script>
 

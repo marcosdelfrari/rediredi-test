@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from "vue";
+
 const props = defineProps({
   visible: Boolean,
   message: String,
@@ -6,25 +8,29 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["confirm", "cancel"]);
+
+const handleConfirm = () => {
+  emit("confirm");
+};
 </script>
 
 <template>
   <div v-if="visible" class="dialog-backdrop">
     <div class="dialog-box">
-      <img src="@/assets/warning.png" alt="" />
+      <img src="@/assets/warning.png" alt="Aviso" />
       <div class="content">
         <h1>{{ title }}</h1>
         <p>{{ message }}</p>
       </div>
       <div class="buttons">
         <button class="close" @click="$emit('cancel')">Não</button>
-        <button class="check" @click="$emit('confirm')">Sim</button>
+        <button class="check" @click="handleConfirm">Sim</button>
       </div>
     </div>
   </div>
 </template>
 
-<style>
+<style scoped>
 img {
   width: 80px;
   height: 80px;

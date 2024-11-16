@@ -1,7 +1,6 @@
 <script setup>
 import { ref, nextTick } from "vue";
 
-// Definindo as propriedades que o componente irá receber
 const props = defineProps({
   name: {
     type: String,
@@ -13,10 +12,9 @@ const props = defineProps({
   },
 });
 
-// Emite os eventos de renomear e excluir
 const emit = defineEmits(["delete", "rename"]);
 
-const isRenaming = ref(false); // Controle para saber se está renomeando
+const isRenaming = ref(false);
 const newName = ref("");
 const showPopover = ref(false);
 
@@ -25,13 +23,13 @@ const togglePopover = () => {
 };
 
 const startRenaming = () => {
-  newName.value = props.name; // Inicializa o novo nome com o nome atual
-  isRenaming.value = true; // Define que está em modo de renomeação
-  showPopover.value = false; // Fecha o popover
+  newName.value = props.name;
+  isRenaming.value = true;
+  showPopover.value = false;
   nextTick(() => {
     const inputElement = document.querySelector(".input");
     if (inputElement) {
-      inputElement.focus(); // Foca no campo de entrada
+      inputElement.focus();
     }
   });
 };
@@ -57,13 +55,11 @@ const cancelRename = () => {
   <li class="subcategoria-item">
     <div class="item" v-if="!isRenaming">
       <span v-if="!isRenaming">{{ name }}</span>
-      <!-- Ícone de mais opções -->
       <v-icon @click="togglePopover" v-if="!isRenaming"
         >mdi-dots-horizontal</v-icon
       >
     </div>
 
-    <!-- Se estiver renomeando, exibe o campo de input -->
     <div v-else class="item renaming">
       <input v-model="newName" class="input" />
       <div class="buttons">

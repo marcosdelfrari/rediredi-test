@@ -1,49 +1,52 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import {
-  fetchCategories,
-  updateCategoryChildren,
-} from "../services/categorias.js";
+import { ref } from "vue";
 
-const categories = ref([]);
+const categories = ref([
+  {
+    id: 1,
+    name: "Categoria 1",
+    subcategories: [
+      { id: 101, name: "Subcategoria 1.1" },
+      { id: 102, name: "Subcategoria 1.2" },
+    ],
+  },
+  {
+    id: 2,
+    name: "Categoria 2",
+    subcategories: [
+      { id: 201, name: "Subcategoria 2.1" },
+      { id: 202, name: "Subcategoria 2.2" },
+    ],
+  },
+]);
 
-const loadCategories = async () => {
-  try {
-    const data = await fetchCategories();
-    categories.value = data;
-  } catch (error) {
-    console.error("Erro ao carregar categorias:", error);
-  }
-};
-
-const addSubcategoryToCategory = async (categoryId, subcategoryName) => {
+// Função para adicionar subcategoria
+const addSubcategory = ({ categoryId, name }) => {
   const category = categories.value.find((cat) => cat.id === categoryId);
-
-  if (category) {
-    category.children = category.children || [];
-
-    category.children.push(subcategoryName);
-    category.hasChildren = true;
-
-    try {
-      await updateCategoryChildren(category);
-    } catch (error) {
-      console.error("Erro ao editar subcategoria:", error);
-    }
-  } else {
-    console.error("Categoria não encontrada com o ID:", categoryId);
+  if (category && name.trim()) {
+    category.subcategories.push({
+      id: Date.now(),
+      name,
+    });
   }
 };
 
-onMounted(() => {
-  loadCategories();
-});
+// Função para renomear subcategoria
+const renameSubcategory = ({ id, newName }) => {
+  // Encontrar a categoria correspondente
+  categories.value.forEach((category) => {
+    const subcategory = category.subcategories.find((sub) => sub.id === id);
+    if (subcategory) {
+      subcategory.name = newName; // Atualiza o nome da subcategoria
+    }
+  });
+};
 </script>
 
 <template>
   <Navbar title="Subcategorias" />
   <div class="container">
-    <h2>Adicione ou gerencie subcategorias abaixo das categorias</h2>
+    <h2>Adicione subcategorias abaixo das categorias</h2>
 
     <v-expansion-panels variant="accordion">
       <v-expansion-panel
@@ -52,25 +55,25 @@ onMounted(() => {
         :title="category.name"
       >
         <template v-slot:text>
-          <!-- Lista de subcategorias -->
-          <div v-if="category.children && category.children.length">
+          <div v-if="category.subcategories.length">
             <ul>
               <SubCategoriaItem
-                v-for="sub in category.children"
+                v-for="sub in category.subcategories"
                 :key="sub.id"
                 :id="sub.id"
                 :name="sub.name"
+                @rename="renameSubcategory"
               />
             </ul>
           </div>
           <div v-else>
             <p>Sem subcategorias.</p>
           </div>
+
+          <!-- Formulário para criar nova subcategoria -->
           <CriarSubCategoria
             :categoryId="category.id"
-            @addSubcategory="
-              (name) => addSubcategoryToCategory(category.id, name)
-            "
+            @addSubcategory="addSubcategory"
           />
         </template>
       </v-expansion-panel>

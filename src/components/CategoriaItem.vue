@@ -1,5 +1,5 @@
 <script setup>
-import { ref, nextTick } from "vue";
+import { ref, nextTick, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
   category: Object,
@@ -10,6 +10,7 @@ const emit = defineEmits(["delete", "rename"]);
 const isRenaming = ref(false);
 const newName = ref("");
 const showPopover = ref(false);
+const popoverRef = ref(null);
 
 const togglePopover = () => {
   showPopover.value = !showPopover.value;
@@ -19,11 +20,10 @@ const startRenaming = () => {
   newName.value = props.category.name;
   isRenaming.value = true;
   showPopover.value = false;
-  // Aguardar o próximo ciclo de atualização do DOM para dar foco no input
   nextTick(() => {
     const inputElement = document.querySelector(".input");
     if (inputElement) {
-      inputElement.focus(); // Dar foco ao input
+      inputElement.focus();
     }
   });
 };
@@ -41,16 +41,28 @@ const confirmDelete = () => {
 const cancelRename = () => {
   isRenaming.value = false;
 };
+
+const handleClickOutside = (event) => {
+  if (popoverRef.value && !popoverRef.value.contains(event.target)) {
+    showPopover.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("mousedown", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("mousedown", handleClickOutside);
+});
 </script>
 
 <template>
   <div>
     <div class="item" v-if="!isRenaming">
       <span>{{ category.name }}</span>
-
       <v-icon @click="togglePopover">mdi-dots-horizontal</v-icon>
-
-      <div class="popover" v-if="showPopover">
+      <div ref="popoverRef" class="popover" v-if="showPopover">
         <button @click="startRenaming">
           <v-icon>mdi-pencil-outline</v-icon> Renomear
         </button>

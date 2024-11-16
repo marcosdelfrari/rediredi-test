@@ -1,14 +1,38 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import {
+  fetchCategories,
+  addCategory,
+  editCategory,
+  deleteCategoryFromApi,
+} from "../services/categorias.js";
 
 const categories = ref([]);
 const categoryToDelete = ref(null);
 const showConfirmDialog = ref(false);
 
-const addCategory = (name) => {
-  // Exemplo: adicionar nova categoria na lista local (simula API)
-  const newCategory = { id: Date.now(), name, hasChildren: false };
-  categories.value.push(newCategory);
+const loadCategories = async () => {
+  try {
+    const loadedCategories = await fetchCategories();
+    categories.value = loadedCategories;
+  } catch (error) {
+    console.error("Erro ao carregar as categorias:", error);
+  }
+};
+
+const addCategoryToList = async (name) => {
+  const newCategory = {
+    id: Date.now(),
+    name,
+    children: [],
+    hasChildren: false,
+  };
+  try {
+    const addedCategory = await addCategory(newCategory);
+    categories.value.push(addedCategory);
+  } catch (error) {
+    console.error("Erro ao adicionar categoria:", error);
+  }
 };
 
 const confirmDelete = (id) => {
@@ -16,31 +40,39 @@ const confirmDelete = (id) => {
   showConfirmDialog.value = true;
 };
 
-const deleteCategory = () => {
-  // Excluir localmente (simula API)
-  categories.value = categories.value.filter(
-    (category) => category.id !== categoryToDelete.value
-  );
-  showConfirmDialog.value = false;
-};
-
-const renameCategory = ({ id, newName }) => {
-  // Renomear categoria localmente (simula API)
-  const category = categories.value.find((cat) => cat.id === id);
-  if (category) {
-    category.name = newName;
+const deleteCategory = async () => {
+  try {
+    await deleteCategoryFromApi(categoryToDelete.value);
+    await loadCategories();
+    showConfirmDialog.value = false;
+  } catch (error) {
+    console.error("Erro ao excluir categoria:", error);
+    alert(`Erro ao excluir categoria: ${error.message}`);
   }
 };
 
-const closeDialog = () => {
-  showConfirmDialog.value = false;
+const renameCategory = async ({ id, newName }) => {
+  const category = categories.value.find((cat) => cat.id === id);
+  if (category) {
+    category.name = newName;
+    try {
+      await editCategory(category);
+    } catch (error) {
+      console.error("Erro ao editar categoria:", error);
+    }
+  }
 };
+
+onMounted(() => {
+  loadCategories();
+});
 </script>
 
 <template>
   <Navbar title="Categorias" />
+
   <div class="container">
-    <CategoriaForm @submit="addCategory" />
+    <CategoriaForm @submit="addCategoryToList" />
     <CategoriaList
       class="lines"
       :categories="categories"
@@ -50,12 +82,9 @@ const closeDialog = () => {
     <ConfirmDialog
       :visible="showConfirmDialog"
       title="Deseja excluir a categoria?"
-      message="Essa ação é irreversível e implica na exclusão
-das subcategorias vinculadas.
-Os produtos ligados a essa categoria não
-serão excluídos."
+      message="Essa ação é irreversível."
       @confirm="deleteCategory"
-      @cancel="closeDialog"
+      @cancel="() => (showConfirmDialog.value = false)"
     />
   </div>
 </template>

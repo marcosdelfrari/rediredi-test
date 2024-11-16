@@ -1,3 +1,28 @@
+@font-face {
+  font-family: "TTCommonsTrl";
+  src: url("../assets/fonts/TTCommonsTrl-DemiBold.woff2") format("woff2");
+  font-weight: 600; // DemiBold
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TTCommonsTrl";
+  src: url("../assets/fonts/TTCommonsTrl-Bold.woff2") format("woff2");
+  font-weight: bold; // Bold
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TTCommonsTrl";
+  src: url("../assets/fonts/TTCommonsTrl-Medium.woff2") format("woff2");
+  font-weight: 500; // Medium
+  font-style: normal;
+}
+
+html {
+  font-family: "TTCommonsTrl", sans-serif;
+}
+
 .v-expansion-panel__shadow {
   box-shadow: none !important;
 }
