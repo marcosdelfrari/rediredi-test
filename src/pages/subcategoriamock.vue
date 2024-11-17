@@ -4,23 +4,27 @@ import { ref } from "vue";
 const categories = ref([
   {
     id: 1,
-    name: "Categoria 1",
+    name: "Material escolar",
     subcategories: [
-      { id: 101, name: "Subcategoria 1.1" },
-      { id: 102, name: "Subcategoria 1.2" },
+      { id: 101, name: "Calculadora" },
+      { id: 102, name: "Canetinha" },
     ],
   },
   {
     id: 2,
-    name: "Categoria 2",
+    name: "Material de escritório",
     subcategories: [
-      { id: 201, name: "Subcategoria 2.1" },
-      { id: 202, name: "Subcategoria 2.2" },
+      { id: 201, name: "Pastas" },
+      { id: 202, name: "Calculadoras" },
     ],
+  },
+  {
+    id: 2,
+    name: "Material de pintura",
+    subcategories: [],
   },
 ]);
 
-// Função para adicionar subcategoria
 const addSubcategory = ({ categoryId, name }) => {
   const category = categories.value.find((cat) => cat.id === categoryId);
   if (category && name.trim()) {
@@ -31,13 +35,11 @@ const addSubcategory = ({ categoryId, name }) => {
   }
 };
 
-// Função para renomear subcategoria
 const renameSubcategory = ({ id, newName }) => {
-  // Encontrar a categoria correspondente
   categories.value.forEach((category) => {
     const subcategory = category.subcategories.find((sub) => sub.id === id);
     if (subcategory) {
-      subcategory.name = newName; // Atualiza o nome da subcategoria
+      subcategory.name = newName;
     }
   });
 };
@@ -48,7 +50,7 @@ const renameSubcategory = ({ id, newName }) => {
   <div class="container">
     <h2>Adicione subcategorias abaixo das categorias</h2>
 
-    <v-expansion-panels variant="accordion">
+    <v-expansion-panels variant="accordion" multiple>
       <v-expansion-panel
         v-for="category in categories"
         :key="category.id"
@@ -66,12 +68,9 @@ const renameSubcategory = ({ id, newName }) => {
               />
             </ul>
           </div>
-          <div v-else>
-            <p>Sem subcategorias.</p>
-          </div>
+          <div v-else></div>
 
-          <!-- Formulário para criar nova subcategoria -->
-          <CriarSubCategoria
+          <CriarSub
             :categoryId="category.id"
             @addSubcategory="addSubcategory"
           />

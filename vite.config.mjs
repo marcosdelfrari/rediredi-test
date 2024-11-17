@@ -23,11 +23,12 @@ export default defineConfig({
     }),
     Components(),
     Fonts({
-      google: {
+      custom: {
         families: [
           {
-            name: "Roboto",
-            styles: "wght@100;300;400;500;700;900",
+            name: "TTCommonsTrl",
+            local: "TTCommonsTrl",
+            src: "./src/assets/fonts/TTCommonsTrl-Medium.ttf",
           },
         ],
       },

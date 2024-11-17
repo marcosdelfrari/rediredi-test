@@ -15,13 +15,13 @@ const handleSubmit = () => {
 
 <template>
   <div>
-    <input
-      v-model="categoryName"
-      placeholder="Crie uma categoria"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
-    />
-    <button @click="handleSubmit">Criar</button>
+    <input v-model="categoryName" placeholder="Crie uma categoria" />
+    <button
+      :class="{ active: categoryName.trim() !== '' }"
+      @click="handleSubmit"
+    >
+      Criar
+    </button>
   </div>
 </template>
 
@@ -30,7 +30,6 @@ div {
   display: flex;
   gap: 8px;
   width: 100%;
-  padding: 16px 0;
 }
 
 input {
@@ -59,10 +58,12 @@ button {
   line-height: 20px;
   color: #ffffff;
   transition: background-color 0.3s ease;
+  cursor: not-allowed;
 }
 
-input:focus + button {
+button.active {
   background-color: #f24f82;
   color: #fff;
+  cursor: pointer;
 }
 </style>

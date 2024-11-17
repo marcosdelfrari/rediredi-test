@@ -1,5 +1,5 @@
 <script setup>
-import { ref, nextTick } from "vue";
+import { ref, nextTick, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
   name: {
@@ -17,11 +17,11 @@ const emit = defineEmits(["delete", "rename"]);
 const isRenaming = ref(false);
 const newName = ref("");
 const showPopover = ref(false);
+const popoverRef = ref(null);
 
 const togglePopover = () => {
   showPopover.value = !showPopover.value;
 };
-
 const startRenaming = () => {
   newName.value = props.name;
   isRenaming.value = true;
@@ -49,12 +49,26 @@ const confirmDelete = () => {
 const cancelRename = () => {
   isRenaming.value = false;
 };
+
+const handleClickOutside = (event) => {
+  if (popoverRef.value && !popoverRef.value.contains(event.target)) {
+    showPopover.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("mousedown", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("mousedown", handleClickOutside);
+});
 </script>
 
 <template>
   <li class="subcategoria-item">
     <div class="item" v-if="!isRenaming">
-      <span v-if="!isRenaming">{{ name }}</span>
+      <span>{{ name }}</span>
       <v-icon @click="togglePopover" v-if="!isRenaming"
         >mdi-dots-horizontal</v-icon
       >
@@ -72,8 +86,7 @@ const cancelRename = () => {
       </div>
     </div>
 
-    <!-- Popover de opções -->
-    <div class="popover" v-if="showPopover && !isRenaming">
+    <div ref="popoverRef" class="popover" v-if="showPopover && !isRenaming">
       <button @click="startRenaming">
         <v-icon>mdi-pencil-outline</v-icon> Renomear
       </button>

@@ -1,21 +1,22 @@
 @font-face {
   font-family: "TTCommonsTrl";
-  src: url("../assets/fonts/TTCommonsTrl-DemiBold.woff2") format("woff2");
-  font-weight: 600; // DemiBold
+  src: url("../assets/fonts/TTCommonsTrl-DemiBold.ttf") format("truetype");
+  font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
   font-family: "TTCommonsTrl";
-  src: url("../assets/fonts/TTCommonsTrl-Bold.woff2") format("woff2");
-  font-weight: bold; // Bold
+  src: url("../assets/fonts/TTCommonsTrl-Bold.ttf") format("truetype");
+  font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "TTCommonsTrl";
-  src: url("../assets/fonts/TTCommonsTrl-Medium.woff2") format("woff2");
-  font-weight: 500; // Medium
+  src: url("../assets/fonts/TTCommonsTrl-Medium.woff2") format("woff2"),
+    url("../assets/fonts/TTCommonsTrl-Medium.ttf") format("truetype");
+  font-weight: 500;
   font-style: normal;
 }
 
@@ -55,4 +56,8 @@ ul {
 
 .v-expansion-panel-title:hover > .v-expansion-panel-title__overlay {
   opacity: 0 !important;
+}
+
+.mdi-dots-horizontal {
+  color: #f24f82;
 }

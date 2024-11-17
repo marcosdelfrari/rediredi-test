@@ -52,7 +52,6 @@ onMounted(() => {
         :title="category.name"
       >
         <template v-slot:text>
-          <!-- Lista de subcategorias -->
           <div v-if="category.children && category.children.length">
             <ul>
               <SubCategoriaItem

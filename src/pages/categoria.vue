@@ -72,31 +72,73 @@ onMounted(() => {
   <Navbar title="Categorias" />
 
   <div class="container">
-    <CategoriaForm @submit="addCategoryToList" />
-    <CategoriaList
-      class="lines"
-      :categories="categories"
-      @delete="confirmDelete"
-      @rename="renameCategory"
-    />
-    <ConfirmDialog
-      :visible="showConfirmDialog"
-      title="Deseja excluir a categoria?"
-      message="Essa ação é irreversível."
-      @confirm="deleteCategory"
-      @cancel="() => (showConfirmDialog.value = false)"
-    />
+    <div class="form">
+      <CategoriaForm @submit="addCategoryToList" />
+      <div v-if="categories.length == 0">
+        <div class="info">
+          <h1>Ainda não existem categorias criadas</h1>
+          <p>Digite no campo acima as categorias que deseja criar</p>
+        </div>
+      </div>
+    </div>
+    <div v-if="categories.length > 0">
+      <CategoriaList
+        class="lines"
+        :categories="categories"
+        @delete="confirmDelete"
+        @rename="renameCategory"
+      />
+      <ConfirmDialog
+        :visible="showConfirmDialog"
+        title="Deseja excluir a categoria?"
+        message="Essa ação é irreversível."
+        @confirm="deleteCategory"
+        @cancel="() => (showConfirmDialog.value = false)"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped>
 .container {
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .lines {
   gap: 12px;
   display: flex;
   flex-direction: column;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 4px;
+}
+
+h1 {
+  color: #31436f;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+  color: #586893;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
 }
 </style>
