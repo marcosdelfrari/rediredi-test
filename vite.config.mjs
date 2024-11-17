@@ -43,6 +43,24 @@ export default defineConfig({
       vueTemplate: true,
     }),
   ],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    globals: true,
+    transformMode: {
+      web: [/\.vue$/],
+    },
+    css: {
+      modules: {
+        localsConvention: "camelCaseOnly",
+      },
+    },
+    server: {
+      deps: {
+        inline: ["vuetify"],
+      },
+    },
+  },
   define: { "process.env": {} },
   resolve: {
     alias: {
