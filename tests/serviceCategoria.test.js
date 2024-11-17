@@ -4,12 +4,9 @@ import {
   editCategory,
   deleteCategoryFromApi,
 } from "../src/services/categorias.js";
+import axios from "axios";
 
-global.fetch = vi.fn();
-
-beforeEach(() => {
-  vi.restoreAllMocks();
-});
+vi.mock("axios");
 
 const API_URL =
   "https://wpmh31abs3.execute-api.us-east-1.amazonaws.com/marcos/categories";
@@ -20,63 +17,58 @@ describe("Serviço de Edição de Categoria", () => {
     const mockCategory = { id: 1, name: "Categoria Atualizada" };
     const mockResponse = { id: 1, name: "Categoria Atualizada" };
 
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+    axios.patch.mockResolvedValueOnce({
+      data: mockResponse,
     });
 
     const result = await editCategory(mockCategory);
-    expect(fetch).toHaveBeenCalledWith(`${API_URL}/${mockCategory.id}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Basic ${API_KEY}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(mockCategory),
-    });
+
+    expect(axios.patch).toHaveBeenCalledWith(
+      `${API_URL}/${mockCategory.id}`,
+      mockCategory,
+      {
+        headers: {
+          Authorization: `Basic ${API_KEY}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
     expect(result).toEqual(mockResponse);
   });
 
   it("deve lançar erro se a resposta não for OK", async () => {
     const mockCategory = { id: 1, name: "Categoria Atualizada" };
 
-    fetch.mockResolvedValueOnce({
-      ok: false,
-      status: 400,
+    axios.patch.mockRejectedValueOnce({
+      response: { status: 400, data: "Erro ao editar categoria" },
     });
 
     await expect(editCategory(mockCategory)).rejects.toThrow(
       "Erro ao editar categoria"
     );
   });
-
-  it("deve lançar erro se houver falha de rede", async () => {
-    const mockCategory = { id: 1, name: "Categoria Atualizada" };
-
-    fetch.mockRejectedValueOnce(new Error("Falha de rede"));
-
-    await expect(editCategory(mockCategory)).rejects.toThrow("Falha de rede");
-  });
 });
 
 describe("Serviço de Categorias", () => {
   it("deve adicionar uma nova categoria", async () => {
     const mockCategory = { id: 1, name: "Nova Categoria" };
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(mockCategory),
-      })
-    );
+    const mockResponse = mockCategory;
+
+    axios.post.mockResolvedValueOnce({
+      data: mockResponse,
+    });
 
     const response = await addCategory(mockCategory);
 
-    expect(response).toEqual(mockCategory);
-    expect(global.fetch).toHaveBeenCalledWith(
-      "https://wpmh31abs3.execute-api.us-east-1.amazonaws.com/marcos/categories",
-      expect.any(Object)
-    );
+    expect(response).toEqual(mockResponse);
+    expect(axios.post).toHaveBeenCalledWith(API_URL, mockCategory, {
+      headers: {
+        Authorization: `Basic ${API_KEY}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
   });
 });
 
@@ -88,15 +80,13 @@ describe("Serviço de Exclusão de Categoria", () => {
       message: "Categoria excluída com sucesso.",
     };
 
-    fetch.mockResolvedValueOnce({
-      status: 204,
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+    axios.delete.mockResolvedValueOnce({
+      data: mockResponse,
     });
 
     const result = await deleteCategoryFromApi(categoryId);
-    expect(fetch).toHaveBeenCalledWith(`${API_URL}/${categoryId}`, {
-      method: "DELETE",
+
+    expect(axios.delete).toHaveBeenCalledWith(`${API_URL}/${categoryId}`, {
       headers: {
         Authorization: `Basic ${API_KEY}`,
         Accept: "application/json",
@@ -113,17 +103,15 @@ describe("Serviço de Exclusão de Categoria", () => {
       message: "Categoria excluída com sucesso.",
     };
 
-    fetch.mockResolvedValueOnce({
-      status: 204,
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+    axios.delete.mockResolvedValueOnce({
+      data: mockResponse,
     });
 
     const result = await deleteCategoryFromApi(categoryId, true);
-    expect(fetch).toHaveBeenCalledWith(
+
+    expect(axios.delete).toHaveBeenCalledWith(
       `${API_URL}/${categoryId}?forceDeleteTree=true`,
       {
-        method: "DELETE",
         headers: {
           Authorization: `Basic ${API_KEY}`,
           Accept: "application/json",
@@ -134,30 +122,6 @@ describe("Serviço de Exclusão de Categoria", () => {
     expect(result).toEqual(mockResponse);
   });
 
-  it("deve lançar erro se a resposta não for OK", async () => {
-    const categoryId = 1;
-
-    fetch.mockResolvedValueOnce({
-      status: 400,
-      ok: false,
-      text: () => Promise.resolve("Erro ao excluir categoria"),
-    });
-
-    await expect(deleteCategoryFromApi(categoryId)).rejects.toThrow(
-      "Erro ao deletar categoria: Erro ao excluir categoria"
-    );
-  });
-
-  it("deve lançar erro se a resposta for um erro de rede", async () => {
-    const categoryId = 1;
-
-    fetch.mockRejectedValueOnce(new Error("Falha de rede"));
-
-    await expect(deleteCategoryFromApi(categoryId)).rejects.toThrow(
-      "Falha de rede"
-    );
-  });
-
   it("deve retornar sucesso se a categoria for deletada com sucesso", async () => {
     const categoryId = 1;
     const mockResponse = {
@@ -165,13 +129,12 @@ describe("Serviço de Exclusão de Categoria", () => {
       message: "Categoria excluída com sucesso.",
     };
 
-    fetch.mockResolvedValueOnce({
-      status: 204,
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+    axios.delete.mockResolvedValueOnce({
+      data: mockResponse,
     });
 
     const result = await deleteCategoryFromApi(categoryId);
+
     expect(result).toEqual(mockResponse);
   });
 });

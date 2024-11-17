@@ -34,9 +34,17 @@ loadCategories();
     <button
       class="option"
       v-if="categories.length > 0"
-      @click="router.push('/subcategoriamock')"
+      @click="router.push('/subcategoria')"
     >
       <div class="title">Subcategorias</div>
+      <span><v-icon class="arrow">mdi-chevron-right</v-icon></span>
+    </button>
+    <button
+      class="option"
+      v-if="categories.length > 0"
+      @click="router.push('/subcategoriamock')"
+    >
+      <div class="title">Subcategorias com dados Mockados</div>
       <span><v-icon class="arrow">mdi-chevron-right</v-icon></span>
     </button>
 

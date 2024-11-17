@@ -56,6 +56,7 @@ export async function updateCategoryChildren(category) {
     throw error;
   }
 }
+
 export async function addCategory(category) {
   const url = API_URL;
   const headers = {
@@ -72,6 +73,7 @@ export async function addCategory(category) {
     throw error;
   }
 }
+
 export async function editCategory(category) {
   const url = `${API_URL}/${category.id}`;
   const headers = {
@@ -85,6 +87,7 @@ export async function editCategory(category) {
     return response.data;
   } catch (error) {
     if (error.response) {
+      // Erro com resposta da API (status e dados de erro disponíveis)
       console.error(
         `Erro ao editar categoria (Status: ${error.response.status}):`,
         error.response.data
@@ -95,9 +98,11 @@ export async function editCategory(category) {
         }`
       );
     } else if (error.request) {
+      // Erro de rede (sem resposta)
       console.error("Erro de rede ao editar categoria:", error.request);
-      throw new Error("Falha de rede");
+      throw new Error("Erro de rede ao editar categoria");
     } else {
+      // Qualquer outro erro
       console.error("Erro desconhecido ao editar categoria:", error.message);
       throw new Error("Erro desconhecido ao editar categoria");
     }
