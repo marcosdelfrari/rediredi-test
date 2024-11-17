@@ -19,7 +19,7 @@ const categories = ref([
     ],
   },
   {
-    id: 2,
+    id: 3,
     name: "Material de pintura",
     subcategories: [],
   },

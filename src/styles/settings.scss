@@ -1,29 +1,39 @@
 @font-face {
   font-family: "TTCommonsTrl";
-  src: url("../assets/fonts/TTCommonsTrl-DemiBold.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "TTCommonsTrl";
-  src: url("../assets/fonts/TTCommonsTrl-Bold.ttf") format("truetype");
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "TTCommonsTrl";
-  src: url("../assets/fonts/TTCommonsTrl-Medium.woff2") format("woff2"),
-    url("../assets/fonts/TTCommonsTrl-Medium.ttf") format("truetype");
+  src: url("/fonts/TTCommonsTrl-Medium.woff2") format("woff2"),
+    url("/fonts/TTCommonsTrl-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TTCommonsTrl";
+  src: url("/fonts/TTCommonsTrl-DemiBold.woff2") format("woff2"),
+    url("/fonts/TTCommonsTrl-DemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TTCommonsTrl";
+  src: url("/fonts/TTCommonsTrl-Bold.woff2") format("woff2"),
+    url("/fonts/TTCommonsTrl-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
 html {
   font-family: "TTCommonsTrl", sans-serif;
+  visibility: hidden; /* Oculta o conteúdo até carregar a fonte */
 }
 
+html.fonts-loaded {
+  visibility: visible; /* Mostra o conteúdo após o carregamento das fontes */
+  transition: visibility 0s ease-in-out;
+}
 .v-expansion-panel__shadow {
   box-shadow: none !important;
 }

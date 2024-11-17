@@ -3,18 +3,22 @@
  *
  * Bootstraps Vuetify and other plugins then mounts the App`
  */
+// Fonts Preload
+document.fonts.ready.then(() => {
+  document.documentElement.classList.add("fonts-loaded");
+});
 
 // Plugins
-import { registerPlugins } from '@/plugins'
+import { registerPlugins } from "@/plugins";
 
 // Components
-import App from './App.vue'
+import App from "./App.vue";
 
 // Composables
-import { createApp } from 'vue'
+import { createApp } from "vue";
 
-const app = createApp(App)
+const app = createApp(App);
 
-registerPlugins(app)
+registerPlugins(app);
 
-app.mount('#app')
+app.mount("#app");

@@ -28,7 +28,9 @@ export default defineConfig({
           {
             name: "TTCommonsTrl",
             local: "TTCommonsTrl",
-            src: "./src/assets/fonts/TTCommonsTrl-Medium.ttf",
+            src: "/fonts/TTCommonsTrl-Medium.ttf",
+            transform: true,
+            fontDisplay: "swap",
           },
         ],
       },
