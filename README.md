@@ -2,6 +2,10 @@
 
 Este projeto foi desenvolvido para o desafio técnico. Ele utiliza o **Vuetify** em conjunto com **Vue 3**. Algumas funcionalidades dependem de uma API externa que enfrentou problemas durante o desenvolvimento. Por isso, a solução final inclui uma implementação temporária com dados mockados para garantir a entrega funcional.
 
+## Testes
+
+Os testes estão localizados na pasta tests e foram escritos utilizando o framework **Vitest** para validar componentes e serviços, garantindo a funcionalidade e a qualidade do código.
+
 ## 💿 Install
 
 Set up your project using your preferred package manager. Use the corresponding command to install the dependencies:
