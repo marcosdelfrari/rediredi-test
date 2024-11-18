@@ -11,6 +11,11 @@ const categories = ref([]);
 const categoryToDelete = ref(null);
 const showConfirmDialog = ref(false);
 
+const handleCancel = () => {
+  showConfirmDialog.value = false;
+  console.log("Ação de cancelamento realizada");
+};
+
 const loadCategories = async () => {
   try {
     const loadedCategories = await fetchCategories();
@@ -93,7 +98,7 @@ onMounted(() => {
         title="Deseja excluir a categoria?"
         message="Essa ação é irreversível."
         @confirm="deleteCategory"
-        @cancel="() => (showConfirmDialog.value = false)"
+        @cancel="handleCancel"
       />
     </div>
   </div>

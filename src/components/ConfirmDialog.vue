@@ -70,6 +70,7 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999999;
 }
 .dialog-box {
   background: white;

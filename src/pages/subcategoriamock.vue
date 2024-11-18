@@ -43,6 +43,31 @@ const renameSubcategory = ({ id, newName }) => {
     }
   });
 };
+
+const showConfirmDialog = ref(false);
+const categoryToDelete = ref(null);
+
+const handleCancel = () => {
+  showConfirmDialog.value = false;
+  categoryToDelete.value = null;
+  console.log("Cancelado");
+};
+
+const confirmDelete = (id) => {
+  categoryToDelete.value = id;
+  showConfirmDialog.value = true;
+};
+
+const deleteCategory = () => {
+  categories.value.forEach((category) => {
+    category.subcategories = category.subcategories.filter(
+      (sub) => sub.id !== categoryToDelete.value
+    );
+  });
+  showConfirmDialog.value = false;
+  categoryToDelete.value = null;
+  console.log("Subcategoria deletada");
+};
 </script>
 
 <template>
@@ -64,7 +89,15 @@ const renameSubcategory = ({ id, newName }) => {
                 :key="sub.id"
                 :id="sub.id"
                 :name="sub.name"
+                @delete="confirmDelete"
                 @rename="renameSubcategory"
+              />
+              <ConfirmDialog
+                :visible="showConfirmDialog"
+                title="Deseja excluir a subcategoria?"
+                message="Essa ação é irreversível."
+                @confirm="deleteCategory"
+                @cancel="handleCancel"
               />
             </ul>
           </div>
